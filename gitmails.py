@@ -1,6 +1,8 @@
 import os
+import sys
 import argparse
 from src.gitmails import Gitmails
+from src.helpers.helpers import Helpers
 
 parser = argparse.ArgumentParser(prog="bla", description="Analyze git repositories for unique emails")
 group = parser.add_mutually_exclusive_group(required=True)
@@ -12,27 +14,37 @@ parser.add_argument("--include-forks", help="Include forked repositories", actio
 args = parser.parse_args()
 if args.username:
     args.path = "{}/{}".format(args.path, args.username)
+if args.repository:
+    args.path = "{}/{}".format(args.path, args.repository.split('/')[3])
 
 def updater(m,plugin):
     try:
         plugin = "{}Collector".format(plugin.capitalize())
         result = Gitmails(args, getattr(m,plugin)(args.username))
-        if result:
-            print("\nUnique emails in git history:")
-            for i in result:
-                print("\t{}".format(i))
+        # if result:
+        #     print("\nUnique emails in git history:")
+        #     for i in result:
+        #         print("\t{}".format(i))
     except Exception as e:
         print(str(e),plugin)
 
 def main():
-    path = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(path)
-    files = os.listdir('src/plugins')
-    plugins = [plugin for plugin in files if '__' not in plugin]
-    plugins = [plugin.replace('.py','') for plugin in plugins if '.pyc' not in plugin]
-    for plugin in plugins:
-        m = __import__ ('src.plugins.%s' % (plugin),fromlist=[plugin])
-        updater(m, plugin)
+    if args.username:
+        path = os.path.dirname(os.path.abspath(__file__))
+        os.chdir(path)
+        files = os.listdir('src/plugins')
+        plugins = [plugin for plugin in files if '__' not in plugin]
+        plugins = [plugin.replace('.py','') for plugin in plugins if '.pyc' not in plugin]
+        for plugin in plugins:
+            m = __import__ ('src.plugins.%s' % (plugin),fromlist=[plugin])
+            updater(m, plugin)
+    else:
+        Gitmails(args, [args.repository])
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nQuiting...")
+        Helpers().cleanup(args.path)
+        sys.exit(0)

@@ -5,26 +5,30 @@ from pygit2 import Repository, GIT_SORT_TOPOLOGICAL, GIT_SORT_REVERSE, clone_rep
 
 class Gitmails(object):
     def __new__(self, args, repositories):
+        self.repo_paths = {}
         self.helper = Helpers()
         self.helper.ensure_dir(args.path)
         os.chdir(args.path)
         self.clone_repositories(self, args.path, repositories)
-        emails = self.get_emails(self, args.path)
+        self.get_emails(self)
         self.helper.cleanup(args.path)
-        return emails
 
     def clone_repositories(self, path, repositories):
-        i = randint(0,100000)
         for repo in repositories:
             print("Clonning: " + repo)
-            clone_repository(repo, ('{}/{}'.format(path, str(i))), bare=True)
-            i = randint(0,100000)
+            repo_name = repo.lstrip('https://www.')
+            repo_name = "{}/{}".format(repo_name.split('/')[0], repo_name.split('/')[-1])
+            path = "{}/{}".format(path, repo_name)
+            self.repo_paths[repo] = path
+            clone_repository(repo, path, bare=True)
 
-    def get_emails(self, path):
+    def get_emails(self):
         result = set()
-        for item in os.listdir(path):
-            if os.path.isdir(os.path.join(path, item)):
-                repo = Repository(os.path.join(path, item))
-                for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
-                    result.add(commit.author.name + " - " + commit.author.email)
-        return result
+        for repository, path in self.repo_paths.items():
+            repo = Repository(path)
+            print("Unique emails in {}:".format(repository))
+            for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
+                result.add(commit.author.name + " - " + commit.author.email)
+            for i in result:
+                print("\t{}".format(i))
+            result = set()
