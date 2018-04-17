@@ -10,25 +10,32 @@ class Gitmails(object):
         self.helper.ensure_dir(args.path)
         os.chdir(args.path)
         self.clone_repositories(self, args.path, repositories)
-        self.get_emails(self)
+        self.helper.print_emails(self.get_emails(self))
         self.helper.cleanup(args.path)
 
     def clone_repositories(self, path, repositories):
         for repo in repositories:
-            print("Clonning: " + repo)
-            repo_name = repo.lstrip('https://www.')
-            repo_name = "{}/{}".format(repo_name.split('/')[0], repo_name.split('/')[-1])
-            path = "{}/{}".format(path, repo_name)
-            self.repo_paths[repo] = path
-            clone_repository(repo, path, bare=True)
+            try:
+                print("Clonning: " + repo)
+                repo_name = repo.lstrip('https://www.')
+                repo_name = "{}/{}".format(repo_name.split('/')[0], repo_name.split('/')[-1])
+                p = "{}/{}".format(path, repo_name)
+                clone_repository(repo, p, bare=True)
+                self.repo_paths[repo] = p
+            except Exception as e:
+                print("Could not clone " + repo)
 
     def get_emails(self):
-        result = set()
+        emails = {}
         for repository, path in self.repo_paths.items():
+            result = set()
             repo = Repository(path)
-            print("Unique emails in {}:".format(repository))
             for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
                 result.add(commit.author.name + " - " + commit.author.email)
             for i in result:
-                print("\t{}".format(i))
+                if i in emails:
+                    emails[i] = emails[i] + [repository]
+                else:
+                    emails[i] = [repository]
             result = set()
+        return emails

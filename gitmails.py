@@ -20,15 +20,13 @@ if args.repository:
 def updater(m,plugin):
     try:
         plugin = "{}Collector".format(plugin.capitalize())
-        result = Gitmails(args, getattr(m,plugin)(args.username))
-        # if result:
-        #     print("\nUnique emails in git history:")
-        #     for i in result:
-        #         print("\t{}".format(i))
+        hehe = getattr(m,plugin)(args.username)
+        return hehe
     except Exception as e:
         print(str(e),plugin)
 
 def main():
+    repo_links = []
     if args.username:
         path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(path)
@@ -37,9 +35,11 @@ def main():
         plugins = [plugin.replace('.py','') for plugin in plugins if '.pyc' not in plugin]
         for plugin in plugins:
             m = __import__ ('src.plugins.%s' % (plugin),fromlist=[plugin])
-            updater(m, plugin)
+            repo_links.append(updater(m, plugin))
+        repo_links = Helpers().flatten(repo_links)
     else:
-        Gitmails(args, [args.repository])
+        repo_links = [args.repository]
+    Gitmails(args, repo_links)
 
 if __name__ == '__main__':
     try:
