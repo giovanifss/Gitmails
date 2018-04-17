@@ -9,6 +9,7 @@ group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument("-u", "--username", help="The username of the user")
 group.add_argument("-r", "--repository", help="The link to a repository")
 parser.add_argument("-p", "--path", help="Path to a temporary directory", default="/tmp/gitmails")
+parser.add_argument("-v", "--verbose", help="Print repositories information", action="store_true")
 parser.add_argument("--include-forks", help="Include forked repositories", action="store_true")
 
 args = parser.parse_args()

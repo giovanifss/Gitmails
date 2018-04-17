@@ -15,8 +15,13 @@ class Helpers(object):
         else:
             return [item for sublist in lst for item in sublist]
 
-    def print_emails(self, emails_repos):
+    def print_verbose_emails(self, emails_repos):
         for email, repositories in emails_repos.items():
             print("\n\n{} found in:".format(email))
             for i in repositories:
                 print("\t{}".format(i))
+
+    def print_emails(self, emails_repos):
+        for i in emails_repos:
+            print(i)
+

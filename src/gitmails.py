@@ -9,21 +9,29 @@ class Gitmails(object):
         self.helper = Helpers()
         self.helper.ensure_dir(args.path)
         os.chdir(args.path)
-        self.clone_repositories(self, args.path, repositories)
-        self.helper.print_emails(self.get_emails(self))
+        self.clone_repositories(self, args.path, repositories, args.verbose)
+        if args.verbose:
+            self.helper.print_verbose_emails(self.get_emails(self))
+        else:
+            print("Collecting emails...")
+            self.helper.print_emails(self.get_emails(self))
         self.helper.cleanup(args.path)
 
-    def clone_repositories(self, path, repositories):
+    def clone_repositories(self, path, repositories, verbose):
+        if not verbose:
+            print("Clonning repositories..")
         for repo in repositories:
             try:
-                print("Clonning: " + repo)
+                if verbose:
+                    print("Clonning: " + repo)
                 repo_name = repo.lstrip('https://www.')
                 repo_name = "{}/{}".format(repo_name.split('/')[0], repo_name.split('/')[-1])
                 p = "{}/{}".format(path, repo_name)
                 clone_repository(repo, p, bare=True)
                 self.repo_paths[repo] = p
             except Exception as e:
-                print("Could not clone " + repo)
+                if verbose:
+                    print("Could not clone " + repo)
 
     def get_emails(self):
         emails = {}
