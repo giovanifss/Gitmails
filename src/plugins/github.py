@@ -3,10 +3,15 @@ import requests
 from src.helpers.helpers import Helpers
 
 class GithubCollector(object):
-    def __new__(self, username):
+    def __new__(self, args):
+        self.args = args
         self.repositories = []
         self.helper = Helpers()
-        github_url = 'https://api.github.com/users/' + username + '/repos'
+
+        if self.args.username:
+            github_url = "https://api.github.com/users/{}/repos".format(self.args.username)
+        if self.args.organization:
+            github_url = "https://api.github.com/orgs/{}/repos".format(self.args.organization)
         last_page = self.get_last_page(self, github_url)
         if last_page:
             for i in range(1, (last_page + 1)):
@@ -28,13 +33,13 @@ class GithubCollector(object):
         try:
             result = requests.get(url)
             if result.status_code == 403:
-                print("Github: API rate limit exceeded")
+                print("gitmails: Github: API rate limit exceeded")
                 return False
             for repository in result.json():
-                if 'fork' in repository and not repository['fork'] and 'clone_url' in repository:
-                    repositories.append(repository['clone_url'])
+                if 'fork' in repository  and 'clone_url' in repository:
+                    if not (repository['fork'] and not self.args.include_forks):
+                        repositories.append(repository['clone_url'])
             return repositories
         except Exception as e:
-            print(e)
-            print("Could not collect github repositories")
+            print("gitmails: Could not collect github repositories")
             return False

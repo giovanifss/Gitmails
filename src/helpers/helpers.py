@@ -1,5 +1,6 @@
 import os
 import shutil
+from tabulate import tabulate
 
 class Helpers(object):
     def ensure_dir(self, file_path):
@@ -22,6 +23,19 @@ class Helpers(object):
                 print("\t{}".format(i))
 
     def print_emails(self, emails_repos):
-        for i in emails_repos:
+        data = [i for i in emails_repos]
+        email = [d.split(' - ') for d in data]
+        print(tabulate(email,["Name","Email"],"fancy_grid"))
+
+    def print_raw_emails(self, emails_repos):
+        data = [i for i in emails_repos]
+        email = [d.replace(' - ', ',') for d in data]
+        for i in email:
             print(i)
 
+    def print_to_file(self, emails_repos, file_name):
+        data = [i for i in emails_repos]
+        email = [d.replace(' - ', ',') for d in data]
+        with open(file_name, 'a') as f:
+            for i in email:
+                f.write(i + "\n")

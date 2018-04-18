@@ -10,22 +10,29 @@ class Gitmails():
         self.path = args.path
         self.verbose = args.verbose
         self.helper = Helpers()
+
         self.helper.ensure_dir(args.path)
         os.chdir(args.path)
+        if not self.verbose:
+            print("[+] Clonning repositories... (This process can take a while)")
         p = Pool()
         results = p.map(self.clone_repositories, repositories)
-        self.repo_paths = {k: v for d in results for k, v in d.items()}
-        if self.verbose:
-            self.helper.print_verbose_emails(self.get_emails())
-        else:
-            print("Collecting emails...")
-            self.helper.print_emails(self.get_emails())
-        if not args.no_cleanup:
-            self.helper.cleanup(args.path)
+        if results:
+            self.repo_paths = {k: v for d in results for k, v in d.items()}
+            print("[+] Collecting emails...")
+            emails = self.get_emails()
+            if args.include_repositories:
+                self.helper.print_verbose_emails(emails)
+            elif args.raw:
+                self.helper.print_raw_emails(emails)
+            else:
+                self.helper.print_emails(emails)
+            if args.file:
+                self.helper.print_to_file(emails, args.file)
+            if not args.no_cleanup:
+                self.helper.cleanup(args.path)
 
     def clone_repositories(self, repository):
-        if not self.verbose:
-            print("Clonning repositories..")
         try:
             if self.verbose:
                 print("Clonning: " + repository)
@@ -36,20 +43,24 @@ class Gitmails():
             self.repo_paths[repository] = p
             return self.repo_paths
         except Exception as e:
-            if self.verbose:
-                print("Could not clone " + repository)
+            print(e)
+            print("gitmails: Could not clone " + repository)
+            return False
 
     def get_emails(self):
         emails = {}
         for repository, path in self.repo_paths.items():
             result = set()
             repo = Repository(path)
-            for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
-                result.add(commit.author.name + " - " + commit.author.email)
-            for i in result:
-                if i in emails:
-                    emails[i] = emails[i] + [repository]
-                else:
-                    emails[i] = [repository]
+            try:
+                for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
+                    result.add("{} - {}".format(commit.author.name, commit.author.email))
+                for i in result:
+                    if i in emails:
+                        emails[i] = emails[i] + [repository]
+                    else:
+                        emails[i] = [repository]
+            except Exception as e:
+                print("gitmails: Could not collect emails for {}".format(repository))
             result = set()
         return emails
