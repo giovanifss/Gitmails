@@ -26,11 +26,15 @@ class GithubCollector(object):
     def get_repositories(self, url):
         repositories = []
         try:
-            result = requests.get(url).json()
-            for repository in result:
+            result = requests.get(url)
+            if result.status_code == 403:
+                print("Github: API rate limit exceeded")
+                return False
+            for repository in result.json():
                 if 'fork' in repository and not repository['fork'] and 'clone_url' in repository:
                     repositories.append(repository['clone_url'])
             return repositories
         except Exception as e:
+            print(e)
             print("Could not collect github repositories")
             return False
