@@ -14,6 +14,7 @@ class GitlabCollector(object):
                     self.repositories.append(repository['web_url'])
             return self.repositories
         except Exception as e:
+            print(e)
             print("gitmails: Could not collect gitlab repositories")
             return False
 

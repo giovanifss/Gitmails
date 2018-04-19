@@ -26,6 +26,7 @@ class GithubCollector(object):
             last_url = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2})).+?(?=>)', r.headers['Link'])[-1]
             return int(last_url.split('=')[-1])
         except Exception as e:
+            print(e)
             return 1
 
     def get_repositories(self, url):
@@ -41,5 +42,6 @@ class GithubCollector(object):
                         repositories.append(repository['clone_url'])
             return repositories
         except Exception as e:
+            print(e)
             print("gitmails: Could not collect github repositories")
             return False

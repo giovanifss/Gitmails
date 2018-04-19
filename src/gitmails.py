@@ -61,6 +61,7 @@ class Gitmails():
                     else:
                         emails[i] = [repository]
             except Exception as e:
+                print(e)
                 print("gitmails: Could not collect emails for {}".format(repository))
             result = set()
         return emails

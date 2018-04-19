@@ -15,5 +15,6 @@ class BitbucketCollector(object):
                         self.repositories.append(repository['links']['clone'][0]['href'])
             return self.repositories
         except Exception as e:
+            print(e)
             print("gitmails: Could not collect bitbucket repositories")
             return False
