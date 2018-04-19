@@ -7,11 +7,10 @@ class GitlabCollector(Collector):
         self.args = args
         self.base_url = "https://gitlab.com/api/v4/"
 
-    def collect_user(self):
-        username = self.args.username
+    def collect_user(self, username):
         pass
 
-    def collect_organization(self):
+    def collect_organization(self, organization):
         org = self.args.organization
         pass
 

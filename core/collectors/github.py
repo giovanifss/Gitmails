@@ -14,7 +14,7 @@ class GithubCollector(Collector):
         result = Helpers().request(url)
         if result:
             repos = self.collect_repositories("{}/repos".format(url))
-            return User(result["login"], result["name"], result["email"], result["bio"])
+            return User(result["login"], result["name"], result["email"], result["bio"], repos)
         return False
 
     def collect_organization(self, organization):
@@ -24,7 +24,7 @@ class GithubCollector(Collector):
     def collect_repositories(self, repos_url):
         repos = []
         last_page = Helpers().get_last_page(repos_url)
-        last_range = last_range + 1 if last_range == 0 else last_range
+        last_page = last_page + 1 if last_page == 0 else last_page
         for i in range(1, (last_page + 1)):
             result = Helpers().request("{}?page={}".format(repos_url, last_page))
             repos.append([Repository(repo['clone_url'], None) for repo in result if result and not (repo['fork'] and not self.args.include_forks)])

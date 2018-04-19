@@ -1,5 +1,5 @@
 class Repository:
-    def __init__(self, url, authors)
+    def __init__(self, url, authors):
         self.url = url
         self.authors = authors
 
