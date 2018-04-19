@@ -17,10 +17,10 @@ class Helpers:
     def get_last_page(self, url):
         try:
             result = self.request(url, method="head")
-            last_url = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2})).+?(?=>)', result.headers['Link'])[-1]
+            last_url = re.findall("https?://(?:[-\w.]|(?:%[\da-fA-F]{2})).+?(?=>)", result.headers["Link"])[-1]
             return int(last_url.split('=')[-1])
         except Exception as e:
-            self.print_error(e)
+            #self.print_error(e)
             return 0
 
     def flatten(self, lst):

@@ -19,7 +19,21 @@ class GithubCollector(Collector):
 
     def collect_organization(self, organization):
         url = "{}/orgs/{}".format(self.base_url, organization)
+        result = Helpers().request(url)
+        if result:
+            members = self.collect_members("{}/members".format(url))
+            repos = self.collect_repositories("{}/repos".format(url))
+            return Organization(result["name"], result["email"], result["blog"], repos, members)
         pass
+
+    def collect_members(self, members_url):
+        members = []
+        last_page = Helpers().get_last_page(members_url)
+        last_page = last_page + 1 if last_page == 0 else last_page
+        for i in range(1, (last_page + 1)):
+            result = Helpers().request("{}?page={}".format(members_url, last_page))
+            members.append(list(filter(bool, [self.collect_user(mem["login"]) for mem in result if result])))
+        return Helpers().flatten(members)
 
     def collect_repositories(self, repos_url):
         repos = []

@@ -19,8 +19,8 @@ args = parser.parse_args()
 
 def main():
     github = GithubCollector(args)
-    user = github.collect_user(args.username)
-    print(user)
+    org = github.collect_organization(args.organization)
+    print(org)
     pass
 
 if __name__ == '__main__':
