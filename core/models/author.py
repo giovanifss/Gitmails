@@ -1,11 +1,10 @@
 class Author:
-    def __init__(self, name, email, repositories):
+    def __init__(self, name, email):
         self.name = name
         self.email = email
-        self.repositories = repositories
 
     def __str__(self):
-        return str(self.__dict__)
+        return "\t{} - {}".format(self.name, self.email)
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

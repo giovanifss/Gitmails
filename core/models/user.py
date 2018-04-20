@@ -7,7 +7,14 @@ class User:
         self.repositories = repositories
 
     def __str__(self):
-        return str(self.__dict__)
+        final = "Name: {} ({}):".format(self.name, self.username)
+        if self.email:
+            final = "{} ({})".format(final, self.email)
+        if self.bio:
+            final = "{} - {}".format(final, self.bio)
+        for repo in self.repositories:
+            final = "{}\n{}".format(final, repo.__str__())
+        return final
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

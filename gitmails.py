@@ -1,6 +1,7 @@
 import sys
 import argparse
 from core.collectors.github import GithubCollector
+from core.collectors.gitlab import GitlabCollector
 
 parser = argparse.ArgumentParser(prog="gitmails", description="Analyze git repositories for unique emails")
 group = parser.add_mutually_exclusive_group(required=True)
@@ -18,8 +19,9 @@ parser.add_argument("-f", "--file", help="Output csv result to file")
 args = parser.parse_args()
 
 def main():
-    github = GithubCollector(args)
-    org = github.collect_organization(args.organization)
+    #github = GithubCollector(args)
+    gitlab = GitlabCollector(args)
+    org = gitlab.collect_organization(args.organization)
     print(org)
     pass
 

@@ -7,7 +7,16 @@ class Organization:
         self.members = members
 
     def __str__(self):
-        return str(self.__dict__)
+        final = "Org Name: {}".format(self.name)
+        if self.email:
+            final = "{} ({})".format(final, self.email)
+        if self.members:
+            final = "{} ({} Members)".format(final, len(self.members))
+        if self.blog:
+            final = "{} - {}".format(final, self.blog)
+        for repo in self.repositories:
+            final = "{}\n{}".format(final, repo.__str__())
+        return final
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
