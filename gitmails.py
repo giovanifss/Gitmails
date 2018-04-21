@@ -2,6 +2,7 @@ import sys
 import argparse
 from core.collectors.github import GithubCollector
 from core.collectors.gitlab import GitlabCollector
+from core.collectors.bitbucket import BitbucketCollector
 
 parser = argparse.ArgumentParser(prog="gitmails", description="Analyze git repositories for unique emails")
 group = parser.add_mutually_exclusive_group(required=True)
