@@ -41,8 +41,11 @@ class GithubCollector(Collector):
         last_page = last_page + 1 if last_page == 0 else last_page
         for i in range(1, (last_page + 1)):
             result = Helpers().request("{}?page={}".format(repos_url, last_page))
-            repos.append([Repository(repo['clone_url'], None) for repo in result if result and not (repo['fork'] and not self.args.include_forks)])
+            repos.append(self.parse_repositories(result)) if result else []
         return Helpers().flatten(repos)
+
+    def parse_repositories(self, request_result):
+        return [Repository(repo["id"], repo["name"], repo["clone_url"], None) for repo in request_result if request_result and not (repo["fork"] and not self.args.include_forks)]
 
     def __str__(self):
         return str(self.__dict__)
