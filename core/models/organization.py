@@ -14,8 +14,9 @@ class Organization:
             final = "{} ({} Members)".format(final, len(self.members))
         if self.blog:
             final = "{} - {}".format(final, self.blog)
-        for repo in self.repositories:
-            final = "{}\n{}".format(final, repo.__str__())
+        if self.repositories:
+            for repo in self.repositories:
+                final = "{}\n{}".format(final, repo.__str__())
         return final
 
     def __eq__(self, other):

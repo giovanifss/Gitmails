@@ -1,6 +1,7 @@
 class Repository:
-    def __init__(self, identifier, url, authors):
+    def __init__(self, identifier, name, url, authors):
         self.identifier = identifier
+        self.name = name
         self.url = url
         self.authors = authors
 
@@ -8,9 +9,10 @@ class Repository:
         self.authors = authors
 
     def __str__(self):
-        final = "\t{} (ID: {}):".format(self.url, self.identifier)
-        for author in self.authors:
-            final = "{}\n\t{}".format(final, author.__str__())
+        final = "\t{} (ID: {}): {}".format(self.name, self.identifier, self.url)
+        if self.authors:
+            for author in self.authors:
+                final = "{}\n\t{}".format(final, author.__str__())
         return final
 
     def __eq__(self, other):

@@ -12,8 +12,9 @@ class User:
             final = "{} ({})".format(final, self.email)
         if self.bio:
             final = "{} - {}".format(final, self.bio)
-        for repo in self.repositories:
-            final = "{}\n{}".format(final, repo.__str__())
+        if self.repositories:
+            for repo in self.repositories:
+                final = "{}\n{}".format(final, repo.__str__())
         return final
 
     def __eq__(self, other):

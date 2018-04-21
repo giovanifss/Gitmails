@@ -35,7 +35,7 @@ class GitlabCollector(Collector):
         return repos
 
     def parse_repositories(self, request_result):
-        return [Repository(repo["id"], repo["http_url_to_repo"], None) for repo in request_result if request_result]
+        return [Repository(repo["id"], repo["name"], repo["http_url_to_repo"], None) for repo in request_result if request_result]
 
     def get_collaborators(self, repos):
         if repos:
