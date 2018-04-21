@@ -37,7 +37,19 @@ class BitbucketCollector(Collector):
         return Helpers().flatten(repos)
 
     def parse_repositories(self, request_result):
-        return [Repository(repo["uuid"], repo["name"], repo["links"]["clone"][0]["href"], None) for repo in request_result if request_result]
+        return [Repository(repo["uuid"], repo["name"], repo["links"]["clone"][0]["href"], self.get_contributors(repo["links"]["commits"]["href"])) for repo in request_result if request_result]
+
+    def get_contributors(self, commit_url):
+        authors = []
+        result = Helpers().request(commit_url)
+        authors.append(self.parse_commits(result["values"]) if result else [])
+        while "next" in result:
+            result = Helpers().request(result["next"])
+            authors.append(self.parse_commits(result["values"]) if result else [])
+        return Helpers().flatten(authors)
+
+    def parse_commits(self, request_result):
+        return set([Helpers().parse_git_author(commit["author"]["raw"]) for commit in request_result if request_result])
 
     def __str__(self):
         return str(self.__dict__)

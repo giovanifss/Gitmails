@@ -6,5 +6,11 @@ class Author:
     def __str__(self):
         return "\t{} - {}".format(self.name, self.email)
 
+    def __key(self):
+        return (self.name, self.email)
+
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        return self.__key() == self.__key()
+
+    def __hash__(self):
+        return hash(self.__key())

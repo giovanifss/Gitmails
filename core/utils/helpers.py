@@ -1,6 +1,7 @@
 import re
 import sys
 import requests
+from core.models.author import Author
 
 class Helpers:
     def request(self, url, method="get", accepts=[200], headers=None, data=None):
@@ -28,6 +29,12 @@ class Helpers:
             return []
         else:
             return [item for sublist in lst for item in sublist]
+
+    def parse_git_author(self, string):
+        if string:
+            splitted = string.split('<')
+            return Author(splitted[0].rstrip(), splitted[1].rstrip('>'))
+        return False
 
     def print_error(self, *args, **kwargs):
         print(*args, file=sys.stderr, **kwargs)
