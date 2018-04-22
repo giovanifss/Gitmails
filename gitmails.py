@@ -1,5 +1,6 @@
 import sys
 import argparse
+from core.utils.helpers import Helpers
 from core.collectors.github import GithubCollector
 from core.collectors.gitlab import GitlabCollector
 from core.collectors.bitbucket import BitbucketCollector
@@ -22,14 +23,17 @@ args = parser.parse_args()
 
 def main():
     #github = GithubCollector(args)
-    gitlab = GitlabCollector(args)
-    org = gitlab.collect_organization(args.organization)
-    print(org)
-    pass
+    #gitlab = GitlabCollector(args)
+    bitbucket = BitbucketCollector(args)
+    user = bitbucket.collect_user(args.username)
+    print(user)
+    if not args.no_cleanup:
+        Helpers().cleanup(args.path)
 
 if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
+        Helpers().cleanup(args.path)
         print("\nQuiting...")
         sys.exit(1)
