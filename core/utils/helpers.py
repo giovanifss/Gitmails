@@ -1,5 +1,7 @@
+import os
 import re
 import sys
+import shutil
 import requests
 from core.models.author import Author
 
@@ -30,6 +32,12 @@ class Helpers:
         else:
             return [item for sublist in lst for item in sublist]
 
+    def get_by_identifier(self, repos, repo_id):
+        for repository in repos:
+            if repository.identifier == repo_id:
+                return repository
+        return False
+
     def parse_git_author(self, string):
         if string:
             splitted = string.split('<')
@@ -38,3 +46,10 @@ class Helpers:
 
     def print_error(self, *args, **kwargs):
         print(*args, file=sys.stderr, **kwargs)
+
+    def ensure_dir(self, file_path):
+        if not os.path.exists(file_path):
+            os.makedirs(file_path)
+
+    def cleanup(self, path):
+        shutil.rmtree(path, ignore_errors=True)

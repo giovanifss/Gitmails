@@ -15,5 +15,11 @@ class Repository:
                 final = "{}\n\t{}".format(final, author.__str__())
         return final
 
+    def __key(self):
+        return (self.identifier, self.name, self.url)
+
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        return self.__key() == self.__key()
+
+    def __hash__(self):
+        return hash(self.__key())

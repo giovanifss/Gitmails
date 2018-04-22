@@ -1,4 +1,5 @@
 from core.models.user import User
+from core.utils.git import GitUtils
 from core.utils.helpers import Helpers
 from core.models.collector import Collector
 from core.models.repository import Repository
@@ -42,7 +43,12 @@ class GithubCollector(Collector):
         for i in range(1, (last_page + 1)):
             result = Helpers().request("{}?page={}".format(repos_url, last_page))
             repos.append(self.parse_repositories(result)) if result else []
-        return Helpers().flatten(repos)
+        repos = Helpers().flatten(repos) 
+        self.collect_authors(repos)
+        return repos
+
+    def collect_authors(self, repos):
+        return GitUtils(self.args).get_authors(repos)
 
     def parse_repositories(self, request_result):
         return [Repository(repo["id"], repo["name"], repo["clone_url"], None) for repo in request_result if request_result and not (repo["fork"] and not self.args.include_forks)]
@@ -52,4 +58,3 @@ class GithubCollector(Collector):
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
-
