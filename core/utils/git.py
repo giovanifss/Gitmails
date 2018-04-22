@@ -6,9 +6,13 @@ from pygit2 import Repository, GIT_SORT_TOPOLOGICAL, clone_repository
 class GitUtils:
     def __init__(self, args):
         self.args = args
-
-    def get_authors(self, repos):
         Helpers().ensure_dir(self.args.path)
+
+    def get_repo_authors_by_url(self, repo_url):
+        self.clone_repo_by_url(repo_url)
+        return self.get_authors(self.get_repo_path_by_url(repo_url))
+
+    def set_repos_authors(self, repos):
         p = Pool()
         p.map(self.clone_repo, repos)
         results = p.map(self.get_repo_authors, repos)
@@ -20,12 +24,16 @@ class GitUtils:
         return True
 
     def get_repo_authors(self, repository):
+        authors = self.get_authors(self.get_repo_path(repository))
+        return {repository.identifier:authors}
+
+    def get_authors(self, repo_path):
         try:
             authors_set = set()
-            repo = Repository(self.get_repo_path(repository))
+            repo = Repository(repo_path)
             for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
                 authors_set.add(Author(commit.author.name, commit.author.email))
-            return {repository.identifier:authors_set}
+            return authors_set
         except Exception as e:
             print(e)
             return False
@@ -38,5 +46,22 @@ class GitUtils:
             print(e)
             return False
 
+    def clone_repo_by_url(self, repo_url):
+        try:
+            clone_repository(repo_url, self.get_repo_path_by_url(repo_url), bare=True)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
     def get_repo_path(self, repository):
-        return "{}/{}/{}".format(self.args.path, repository.url.lstrip("https://www.").split('/')[0], "".join(repository.name.split()))
+        return "{}/{}/{}".format(self.args.path, self.get_domain(repository.url), "".join(repository.name.split()))
+
+    def get_repo_path_by_url(self, repo_url):
+        return "{}/{}/{}".format(self.args.path, self.get_domain(repo_url), self.get_repo_name(repo_url))
+
+    def get_domain(self, repo_url):
+        return repo_url.lstrip("https://www.").split('/')[0]
+
+    def get_repo_name(self, repo_url):
+        return repo_url.lstrip("https://www.").split('/')[2]
