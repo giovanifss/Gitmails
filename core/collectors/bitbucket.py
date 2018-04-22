@@ -1,10 +1,9 @@
 from core.models.user import User
+from core.utils.git import GitUtils
 from core.utils.helpers import Helpers
 from core.models.collector import Collector
 from core.models.repository import Repository
 from core.models.organization import Organization
-
-# Olhar api depois
 
 class BitbucketCollector(Collector):
     def __init__(self, args):
@@ -37,7 +36,14 @@ class BitbucketCollector(Collector):
         return Helpers().flatten(repos)
 
     def parse_repositories(self, request_result):
-        return [Repository(repo["uuid"], repo["name"], repo["links"]["clone"][0]["href"], self.get_contributors(repo["links"]["commits"]["href"])) for repo in request_result if request_result]
+        repos = []
+        for repo in request_result:
+            if self.args.api:
+                contributors = self.get_contributors(repo["links"]["commits"]["href"])
+            else:
+                contributors = GitUtils(self.args).get_repo_authors_by_url(repo["links"]["clone"][0]["href"])
+            repos.append(Repository(repo["uuid"], repo["name"], repo["links"]["clone"][0]["href"], contributors))
+        return repos
 
     def get_contributors(self, commit_url):
         authors = []
