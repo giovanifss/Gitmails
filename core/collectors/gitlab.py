@@ -1,4 +1,5 @@
 from core.models.user import User
+from core.utils.git import GitUtils
 from core.models.author import Author
 from core.utils.helpers import Helpers
 from core.models.collector import Collector
@@ -39,8 +40,10 @@ class GitlabCollector(Collector):
 
     def get_collaborators(self, repos):
         if repos:
-            for repo in repos:
-                repo.set_authors(self.repository_collaborators(repo.identifier))
+            if self.args.api:
+                [repo.set_authors(self.repository_collaborators(repo.identifier)) for repo in repos]
+            else:
+                GitUtils(self.args).set_repos_authors(repos)
             return True
         return False
 
