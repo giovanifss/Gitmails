@@ -19,7 +19,6 @@ class GitUtils:
         for i in results:
             if i:
                 [Helpers().get_by_identifier(repos, repo_id).set_authors(authors) for repo_id, authors in i.items()]
-        self.cleanup()
         return True
 
     def get_repo_authors(self, repository):
@@ -64,7 +63,3 @@ class GitUtils:
 
     def get_repo_name(self, repo_url):
         return repo_url.lstrip("https://www.").split('/')[2]
-
-    def cleanup(self):
-        if not self.args.no_cleanup:
-            Helpers().cleanup(self.args.path)
