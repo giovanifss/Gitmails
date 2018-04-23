@@ -10,11 +10,13 @@ class GithubCollector(Collector):
         self.args = args
         self.base_url = "https://api.github.com"
 
-    def collect_user(self, username):
+    def collect_user(self, username, with_repositories=True):
         url = "{}/users/{}".format(self.base_url, username)
         result = Helpers().request(url)
         if result:
-            repos = self.collect_repositories("{}/repos".format(url))
+            repos = None
+            if with_repositories:
+                repos = self.collect_repositories("{}/repos".format(url))
             return User(result["login"], result["name"], result["email"], result["bio"], repos)
         return False
 
@@ -33,7 +35,7 @@ class GithubCollector(Collector):
         last_page = last_page + 1 if last_page == 0 else last_page
         for i in range(1, (last_page + 1)):
             result = Helpers().request("{}?page={}".format(members_url, last_page))
-            members.append(list(filter(bool, [self.collect_user(mem["login"]) for mem in result if result])))
+            members.append(list(filter(bool, [self.collect_user(mem["login"], with_repositories=False) for mem in result if result])))
         return Helpers().flatten(members)
 
     def collect_repositories(self, repos_url):
@@ -41,8 +43,8 @@ class GithubCollector(Collector):
         last_page = Helpers().get_last_page(repos_url)
         last_page = last_page + 1 if last_page == 0 else last_page
         for i in range(1, (last_page + 1)):
-            result = Helpers().request("{}?page={}".format(repos_url, last_page))
-            repos.append(self.parse_repositories(result)) if result else []
+            result = Helpers().request("{}?page={}".format(repos_url, i))
+            repos.append(self.parse_repositories(result) if result else [])
         repos = Helpers().flatten(repos) 
         self.collect_authors(repos)
         return repos
