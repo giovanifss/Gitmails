@@ -12,10 +12,19 @@ class Helpers:
             result = action(url, headers=headers, data=data)
             if result.text and result.status_code in accepts:
                 return result.json()
-            return result
+            elif method == "head":
+                return result
+            return self.analyze_request(result)
         except Exception as e:
             self.print_error(e)
             return False
+
+    def analyze_request(self, request):
+        try:
+            self.print_error("gitmails: {} [{}]: {}".format(request.url, request.status_code, request.json()["message"].split('(')[0].rstrip()))
+        except Exception as e:
+            self.print_error("gitmails: API request status code [{}]".format(request.status_code))
+        return False
 
     def get_last_page(self, url):
         try:
@@ -30,7 +39,7 @@ class Helpers:
         if not lst:
             return []
         else:
-            return [item for sublist in lst for item in sublist]
+            return [item for sublist in lst for item in sublist if sublist]
 
     def get_by_identifier(self, repos, repo_id):
         for repository in repos:
