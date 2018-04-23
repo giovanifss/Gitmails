@@ -1,5 +1,6 @@
 import sys
 import argparse
+from core.utils.parser import Parser
 from core.utils.printer import Printer
 from core.utils.helpers import Helpers
 from core.collectors.github import GithubCollector
@@ -23,11 +24,15 @@ parser.add_argument("-f", "--file", help="Output csv result to file")
 args = parser.parse_args()
 
 def main():
-    #github = GithubCollector(args)
-    gitlab = GitlabCollector(args)
-    #bitbucket = BitbucketCollector(args)
-    user = gitlab.collect_user(args.username)
-    Printer(args).print_repos(user.repositories)
+    github = GithubCollector(args)
+    #gitlab = GitlabCollector(args)
+    bitbucket = BitbucketCollector(args)
+    user = github.collect_organization(args.organization)
+    if not user:
+        Helpers().print_error("gitmails: Could not collect information")
+        sys.exit(1)
+    print(user)
+    Printer(args).print_authors(Parser(args).get_authors(user))
     if not args.no_cleanup:
         Helpers().cleanup(args.path)
 
