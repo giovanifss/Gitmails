@@ -6,6 +6,7 @@ from core.utils.helpers import Helpers
 from core.collectors.github import GithubCollector
 from core.collectors.gitlab import GitlabCollector
 from core.collectors.bitbucket import BitbucketCollector
+from core.plugins.hibp import HIBP
 
 parser = argparse.ArgumentParser(prog="gitmails", description="Analyze git repositories for unique emails")
 group = parser.add_mutually_exclusive_group(required=True)
@@ -33,6 +34,7 @@ def main():
         sys.exit(1)
     print(user)
     Printer(args).print_authors(Parser(args).get_authors(user))
+    HIBP(args, user)
     if not args.no_cleanup:
         Helpers().cleanup(args.path)
 
