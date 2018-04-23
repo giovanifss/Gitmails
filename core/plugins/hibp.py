@@ -8,14 +8,19 @@ class HIBP:
         print("\nStarting Have I Been Pwned plugin...")
         self.args = args
         self.data = data
-        all_authors = Parser(args).get_authors(self.data)
-        if all_authors:
-            self.check_authors(all_authors)
+        all_emails = Parser(args).all_unique_emails(self.data)
+        if all_emails:
+            self.check_all_emails(all_emails)
 
     def check_authors(self, authors):
         for author in authors:
             time.sleep(2)
             self.check_email(author.email)
+
+    def check_all_emails(self, emails):
+        for email in emails:
+            time.sleep(2)
+            self.check_email(email)
 
     def check_email(self, email):
         try:

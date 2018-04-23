@@ -24,17 +24,40 @@ parser.add_argument("-f", "--file", help="Output csv result to file")
 
 args = parser.parse_args()
 
+def collect_users(username, collectors):
+    result = []
+    for c in collectors:
+        user = c.collect_user(username)
+        if user:
+            result.append(user)
+            continue
+        Helpers().print_error("gitmails: Could not collect user information")
+    return result
+
+def collect_organizations(organization, collectors):
+    result = []
+    for c in collectors:
+        org = c.collect_organization(organization)
+        if org:
+            result.append(org)
+            continue
+        Helpers().print_error("gitmails: Could not collect organization information")
+    return result
+
 def main():
-    github = GithubCollector(args)
-    #gitlab = GitlabCollector(args)
-    bitbucket = BitbucketCollector(args)
-    user = github.collect_organization(args.organization)
-    if not user:
-        Helpers().print_error("gitmails: Could not collect information")
+    collected = []
+    collectors = [GithubCollector(args), GitlabCollector(args), BitbucketCollector(args)]
+    if args.username:
+        collected = collect_users(args.username, collectors)
+    elif args.organization:
+        collected = collect_organizations(args.organizations, collectors)
+    else:
+        pass
+    if not collected:
+        Helpers().print_error("gitmails: Could not collect any information")
         sys.exit(1)
-    print(user)
-    Printer(args).print_authors(Parser(args).get_authors(user))
-    HIBP(args, user)
+    Printer(args).print_authors(Parser(args).get_collected_authors(collected))
+    HIBP(args, collected)
     if not args.no_cleanup:
         Helpers().cleanup(args.path)
 
