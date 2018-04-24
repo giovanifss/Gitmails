@@ -1,12 +1,9 @@
 import sys
 import argparse
+from core.gitmails import Gitmails
 from core.utils.parser import Parser
 from core.utils.printer import Printer
 from core.utils.helpers import Helpers
-from core.collectors.github import GithubCollector
-from core.collectors.gitlab import GitlabCollector
-from core.collectors.bitbucket import BitbucketCollector
-from core.plugins.hibp import HIBP
 
 parser = argparse.ArgumentParser(prog="gitmails", description="Analyze git repositories for unique emails")
 group = parser.add_mutually_exclusive_group(required=True)
@@ -27,57 +24,12 @@ parser.add_argument("--raw", help="Print raw results separated by comma", action
 
 args = parser.parse_args()
 
-def get_collectors(args):
-    collectors = []
-    if not args.no_github:
-        collectors.append(GithubCollector(args))
-    if not args.no_gitlab:
-        collectors.append(GitlabCollector(args))
-    if not args.no_bitbucket:
-        collectors.append(BitbucketCollector(args))
-    return collectors
-
-def collect_users(username, collectors):
-    result = []
-    for c in collectors:
-        user = c.collect_user(username)
-        if user:
-            result.append(user)
-            continue
-        Helpers().print_error("gitmails: Could not collect user information")
-    return result
-
-def collect_organizations(organization, collectors):
-    result = []
-    for c in collectors:
-        org = c.collect_organization(organization)
-        if org:
-            result.append(org)
-            continue
-        Helpers().print_error("gitmails: Could not collect organization information")
-    return result
-
-def collect(args, collectors):
-    collected = []
-    if args.username:
-        collected = collect_users(args.username, collectors)
-    elif args.organization:
-        collected = collect_organizations(args.organizations, collectors)
-    else:
-        pass
-    if not collected:
-        Helpers().print_error("gitmails: Could not collect any information")
-        sys.exit(1)
-    return collected
-
 def main():
-    collectors = get_collectors(args)
-    collected = collect(args, collectors)
+    collected = Gitmails(args).execute()
     authors = Parser(args).get_collected_authors(collected)
     Printer(args).print_authors(authors)
     if args.file:
         Helpers().write_authors_file(args.file, authors)
-    #HIBP(args, collected)
     if not args.no_cleanup:
         Helpers().cleanup(args.path)
 
