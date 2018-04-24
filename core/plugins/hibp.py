@@ -1,16 +1,22 @@
 import time
 import requests
-from core.utils.helpers import Helpers
 from core.utils.parser import Parser
+from core.utils.helpers import Helpers
+from core.models.plugin import BasePlugin
 
-class HIBP:
-    def __init__(self, args, data):
-        print("\nStarting Have I Been Pwned plugin...")
+class HIBP(BasePlugin):
+    def __init__(self, args):
         self.args = args
-        self.data = data
-        all_emails = Parser(args).all_unique_emails(self.data)
+        self.base_url = "https://haveibeenpwned.com/api/v2/breachedaccount"
+        self.url_parameters = "truncateResponse=true&includeUnverified=true"
+
+    def execute(self, data):
+        print("\nStarting Have I Been Pwned plugin...")
+        all_emails = Parser(self.args).all_unique_emails(data)
         if all_emails:
             self.check_all_emails(all_emails)
+            return True
+        return False
 
     def check_authors(self, authors):
         for author in authors:
@@ -24,7 +30,7 @@ class HIBP:
 
     def check_email(self, email):
         try:
-            url = "https://haveibeenpwned.com/api/v2/breachedaccount/{}?truncateResponse=true&includeUnverified=true".format(email)
+            url = "{}/{}?{}".format(self.base_url, email, self.url_parameters)
             r = requests.get(url)
             if r.status_code == 503:
                 Helpers().print_error("hibp: IP got in DDoS protection by CloudFare")
