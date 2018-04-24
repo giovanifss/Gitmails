@@ -56,6 +56,18 @@ class Helpers:
     def print_error(self, *args, **kwargs):
         print(*args, file=sys.stderr, **kwargs)
 
+    def print_warning(self, string, jumpline=False):
+        result = "[!] {}".format(string)
+        if jumpline:
+            result = "\n{}".format(result)
+        print(result)
+
+    def print_success(self, string, jumpline=False):
+        result = "[+] {}".format(string)
+        if jumpline:
+            result = "\n{}".format(result)
+        print(result)
+
     def ensure_dir(self, file_path):
         if not os.path.exists(file_path):
             os.makedirs(file_path)

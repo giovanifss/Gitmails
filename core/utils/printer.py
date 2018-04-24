@@ -21,20 +21,23 @@ class Printer:
         authors = []
         for item in data:
             authors.append(Parser(self.args).get_authors(item))
-        print("[+] All emails:\n")
-        self.print_raw_authors(set(Helpers().flatten(authors)))
+        if authors:
+            Helpers().print_success("All emails:\n")
+            self.print_raw_authors(set(Helpers().flatten(authors)))
+        else:
+            Helpers().print_error("gitmails: No authors to print")
 
     def print_organizations(self, organizations):
         for o in organizations:
             self.print_organization(o)
 
     def print_organization(self, organization):
-        base = "[+] {}".format(organization.name)
+        base = "{}".format(organization.name)
         if organization.email:
             base = "{} <{}>".format(base, organization.email)
         if organization.members:
             base = "{} ({} Members)".format(base, len(organization.members))
-        print("{}:".format(base))
+        Helpers().print_success("{}:".format(base))
         if organization.blog:
             print("  Blog: {}".format(organization.blog))
         self.print_repos(organization.repositories)
@@ -44,10 +47,10 @@ class Printer:
             self.print_user(u)
 
     def print_user(self, user):
-        base = "[+] {} ({})".format(user.name, user.username)
+        base = "{} ({})".format(user.name, user.username)
         if user.email:
             base = "{} - {}".format(base, user.email)
-        print("{}:".format(base))
+        Helpers().print_success("{}:".format(base))
         if user.bio:
             print("  Bio: {}".format(user.bio))
         self.print_repos(user.repositories)

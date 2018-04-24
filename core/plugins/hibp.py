@@ -11,7 +11,7 @@ class HIBP(BasePlugin):
         self.url_parameters = "truncateResponse=true&includeUnverified=true"
 
     def execute(self, data):
-        print("\n[!] Starting Have I Been Pwned plugin...")
+        Helpers().print_warning("Starting Have I Been Pwned plugin...", jumpline=True)
         all_emails = Parser(self.args).all_unique_emails(data)
         if all_emails:
             self.check_all_emails(all_emails)
@@ -44,5 +44,5 @@ class HIBP(BasePlugin):
                 return True
             return False
         except Exception as e:
-            print(e)
+            Helpers().print_error(e)
             return False
