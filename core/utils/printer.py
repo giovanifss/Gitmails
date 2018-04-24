@@ -19,8 +19,9 @@ class Printer:
 
     def print_raw(self, data):
         authors = []
-        for item in data:
-            authors.append(Parser(self.args).get_authors(item))
+        if data:
+            for item in data:
+                authors.append(Parser(self.args).get_authors(item))
         if authors:
             Helpers().print_success("All emails:\n")
             self.print_raw_authors(set(Helpers().flatten(authors)))
@@ -28,8 +29,9 @@ class Printer:
             Helpers().print_error("gitmails: No authors to print")
 
     def print_organizations(self, organizations):
-        for o in organizations:
-            self.print_organization(o)
+        if organizations:
+            for o in organizations:
+                self.print_organization(o)
 
     def print_organization(self, organization):
         base = "{}".format(organization.name)
@@ -43,8 +45,9 @@ class Printer:
         self.print_repos(organization.repositories)
 
     def print_users(self, users):
-        for u in users:
-            self.print_user(u)
+        if users:
+            for u in users:
+                self.print_user(u)
 
     def print_user(self, user):
         base = "{} ({})".format(user.name, user.username)

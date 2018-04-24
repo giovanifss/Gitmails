@@ -1,3 +1,4 @@
+import sys
 from core.plugins.hibp import HIBP
 from core.utils.parser import Parser
 from core.utils.helpers import Helpers
@@ -13,6 +14,8 @@ class Gitmails:
 
     def execute(self):
         collected = self.collect(self.get_collectors())
+        if not collected:
+            sys.exit(3)
         Printer(self.args).print(collected)
         if self.args.file:
             Helpers().write_authors_file(self.args.file, Parser(self.args).get_collected_authors(collected))
