@@ -65,6 +65,6 @@ class Helpers:
 
     def write_authors_file(self, filename, authors):
         with open(filename, 'w') as f:
-            print("Writing results to file {}".format(filename))
+            print("\n[!] Writing results to file {}".format(filename))
             for a in authors:
                 f.write("{},{}\n".format(a.name, a.email))

@@ -1,4 +1,5 @@
 from core.plugins.hibp import HIBP
+from core.utils.parser import Parser
 from core.utils.helpers import Helpers
 from core.utils.printer import Printer
 from core.collectors.github import GithubCollector
@@ -13,6 +14,8 @@ class Gitmails:
     def execute(self):
         collected = self.collect(self.get_collectors())
         Printer(self.args).print(collected)
+        if self.args.file:
+            Helpers().write_authors_file(self.args.file, Parser(self.args).get_collected_authors(collected))
         self.apply_plugins(self.get_plugins(), collected)
         return collected
 

@@ -1,8 +1,6 @@
 import sys
 import argparse
 from core.gitmails import Gitmails
-from core.utils.parser import Parser
-from core.utils.printer import Printer
 from core.utils.helpers import Helpers
 
 parser = argparse.ArgumentParser(prog="gitmails", description="Analyze git repositories for unique emails")
@@ -26,8 +24,6 @@ args = parser.parse_args()
 
 def main():
     collected = Gitmails(args).execute()
-    if collected and args.file:
-        Helpers().write_authors_file(args.file, Parser(args).get_collected_authors(collected))
     if not args.no_cleanup:
         Helpers().cleanup(args.path)
 

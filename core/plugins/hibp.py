@@ -11,7 +11,7 @@ class HIBP(BasePlugin):
         self.url_parameters = "truncateResponse=true&includeUnverified=true"
 
     def execute(self, data):
-        print("\nStarting Have I Been Pwned plugin...")
+        print("\n[!] Starting Have I Been Pwned plugin...")
         all_emails = Parser(self.args).all_unique_emails(data)
         if all_emails:
             self.check_all_emails(all_emails)
@@ -33,9 +33,9 @@ class HIBP(BasePlugin):
             url = "{}/{}?{}".format(self.base_url, email, self.url_parameters)
             r = requests.get(url)
             if r.status_code == 503:
-                Helpers().print_error("  hibp: IP got in DDoS protection by CloudFare")
+                Helpers().print_error("hibp: IP got in DDoS protection by CloudFare")
             elif r.status_code == 429:
-                Helpers().print_error("  hibp: Throttled by HIBP API")
+                Helpers().print_error("hibp: Throttled by HIBP API")
             elif r.text:
                 r = r.json()
                 print("\n{} leaks:".format(email))
