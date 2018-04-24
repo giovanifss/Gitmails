@@ -33,9 +33,9 @@ class HIBP(BasePlugin):
             url = "{}/{}?{}".format(self.base_url, email, self.url_parameters)
             r = requests.get(url)
             if r.status_code == 503:
-                Helpers().print_error("hibp: IP got in DDoS protection by CloudFare")
+                Helpers().print_error("  hibp: IP got in DDoS protection by CloudFare")
             elif r.status_code == 429:
-                Helpers().print_error("hibp: Throttled by HIBP API")
+                Helpers().print_error("  hibp: Throttled by HIBP API")
             elif r.text:
                 r = r.json()
                 print("\n{} leaks:".format(email))

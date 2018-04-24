@@ -26,10 +26,8 @@ args = parser.parse_args()
 
 def main():
     collected = Gitmails(args).execute()
-    authors = Parser(args).get_collected_authors(collected)
-    Printer(args).print_authors(authors)
-    if args.file:
-        Helpers().write_authors_file(args.file, authors)
+    if collected and args.file:
+        Helpers().write_authors_file(args.file, Parser(args).get_collected_authors(collected))
     if not args.no_cleanup:
         Helpers().cleanup(args.path)
 
