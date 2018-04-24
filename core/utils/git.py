@@ -40,6 +40,8 @@ class GitUtils:
         try:
             clone_repository(repo.url, self.get_repo_path(repo), bare=True)
             return True
+        except ValueError as e:
+            return False
         except Exception as e:
             print(e)
             return False
