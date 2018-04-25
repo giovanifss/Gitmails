@@ -66,7 +66,7 @@ You can also use the docker version of the tool by issuing the following command
 - `docker run -it giovanifss/gitmails --help`
 
 ## Contributing
-If you want to contribute with the project, take a look at [CONTRIBUTING](CONTRIBUTING).
+If you want to contribute with the project, take a look at [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Disclaimer
 This tool collects data that can be useful for legal offensive security jobs. The authors of this
