@@ -31,9 +31,11 @@ class Printer:
     def print_organizations(self, organizations):
         if organizations:
             for o in organizations:
-                self.print_organization(o)
+                self.print_organization(o, with_repos=self.args.include_repositories)
+                if not self.args.include_repositories:
+                    self.print_authors(Parser(self.args).get_authors(o), headers=["Name","Email"], table="fancy_grid")
 
-    def print_organization(self, organization):
+    def print_organization(self, organization, with_repos=True):
         base = "{}".format(organization.name)
         if organization.email:
             base = "{} <{}>".format(base, organization.email)
@@ -42,21 +44,25 @@ class Printer:
         Helpers().print_success("{}:".format(base))
         if organization.blog:
             print("  Blog: {}".format(organization.blog))
-        self.print_repos(organization.repositories)
+        if with_repos:
+            self.print_repos(organization.repositories)
 
     def print_users(self, users):
         if users:
             for u in users:
-                self.print_user(u)
+                self.print_user(u, with_repos=self.args.include_repositories)
+                if not self.args.include_repositories:
+                    self.print_authors(Parser(self.args).get_authors(u), headers=["Name","Email"], table="fancy_grid")
 
-    def print_user(self, user):
+    def print_user(self, user, with_repos=True):
         base = "{} ({})".format(user.name, user.username)
         if user.email:
             base = "{} - {}".format(base, user.email)
         Helpers().print_success("{}:".format(base))
         if user.bio:
             print("  Bio: {}".format(user.bio))
-        self.print_repos(user.repositories)
+        if with_repos:
+            self.print_repos(user.repositories)
 
     def print_repos(self, repos, indentation=0):
         if not repos:
