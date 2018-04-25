@@ -8,6 +8,7 @@ from core.models.organization import Organization
 class BitbucketCollector(Collector):
     def __init__(self, args):
         self.args = args
+        self.collector_name = "bitbucket"
         self.base_url = "https://api.bitbucket.org/2.0"
 
     def collect_user(self, username):

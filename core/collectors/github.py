@@ -8,6 +8,7 @@ from core.models.organization import Organization
 class GithubCollector(Collector):
     def __init__(self, args):
         self.args = args
+        self.collector_name = "github"
         self.base_url = "https://api.github.com"
 
     def collect_user(self, username, with_repositories=True):

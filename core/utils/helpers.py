@@ -23,7 +23,7 @@ class Helpers:
         try:
             self.print_error("gitmails: {} [{}]: {}".format(request.url, request.status_code, request.json()["message"].split('(')[0].rstrip()))
         except Exception as e:
-            self.print_error("gitmails: API request status code [{}]".format(request.status_code))
+            self.print_error("gitmails: {} [{}]".format(request.url, request.status_code))
         return False
 
     def get_last_page(self, url):

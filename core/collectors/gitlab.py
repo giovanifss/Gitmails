@@ -9,6 +9,7 @@ from core.models.organization import Organization
 class GitlabCollector(Collector):
     def __init__(self, args):
         self.args = args
+        self.collector_name = "gitlab"
         self.base_url = "https://gitlab.com/api/v4"
 
     def collect_user(self, username):

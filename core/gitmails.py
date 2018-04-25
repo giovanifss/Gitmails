@@ -43,7 +43,7 @@ class Gitmails:
             if user:
                 result.append(user)
                 continue
-            Helpers().print_error("gitmails: Could not collect user information")
+            Helpers().print_error("{}: Could not collect user information".format(c.collector_name))
         return result
 
     def collect_organizations(self, organization, collectors):
@@ -53,7 +53,7 @@ class Gitmails:
             if org:
                 result.append(org)
                 continue
-            Helpers().print_error("gitmails: Could not collect organization information")
+            Helpers().print_error("{}: Could not collect organization information".format(c.collector_name))
         return result
 
     def get_collectors(self):

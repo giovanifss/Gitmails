@@ -33,7 +33,7 @@ class GitUtils:
                 authors_set.add(Author(commit.author.name, commit.author.email))
             return authors_set
         except Exception as e:
-            Helpers().print_error("{}: {}".format(repo_path, e))
+            Helpers().print_error("{}: Could not collect authors".format(repo_path))
             return None
 
     def clone_repo(self, repo):
