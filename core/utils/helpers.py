@@ -36,10 +36,13 @@ class Helpers:
             return 0
 
     def flatten(self, lst):
-        if not lst:
-            return []
-        else:
-            return [item for sublist in lst for item in sublist if sublist]
+        result = []
+        if lst:
+            for sublist in lst:
+                if sublist:
+                    for item in sublist:
+                        result.append(item)
+        return result
 
     def get_by_identifier(self, repos, repo_id):
         for repository in repos:

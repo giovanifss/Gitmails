@@ -22,8 +22,9 @@ class Parser:
         emails = set()
         if target:
             for repo in target.repositories:
-                for author in repo.authors:
-                    emails.add(author.email)
+                if repo.authors:
+                    for author in repo.authors:
+                        emails.add(author.email)
         return emails
 
     def get_authors(self, target):

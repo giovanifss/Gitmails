@@ -69,8 +69,11 @@ class Printer:
         print(self.indent("- {} ({}):".format(repo.name, repo.url), indentation))
 
     def print_authors(self, authors, headers=[], table="plain", indentation=0):
-        authors_table = [[author.name, author.email] for author in authors]
-        print(self.indent(tabulate(authors_table, headers, table), indentation))
+        authors_table = [[author.name, author.email] for author in authors] if authors else []
+        if authors_table:
+            print(self.indent(tabulate(authors_table, headers, table), indentation))
+        else:
+            print(self.indent("No authors", indentation))
 
     def print_raw_authors(self, authors, indentation=0):
         for a in authors:

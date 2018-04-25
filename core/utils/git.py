@@ -33,8 +33,8 @@ class GitUtils:
                 authors_set.add(Author(commit.author.name, commit.author.email))
             return authors_set
         except Exception as e:
-            print(e)
-            return False
+            Helpers().print_error("{}: {}".format(repo_path, e))
+            return None
 
     def clone_repo(self, repo):
         try:
@@ -43,7 +43,7 @@ class GitUtils:
         except ValueError as e:
             return False
         except Exception as e:
-            print(e)
+            Helpers().print_error(e)
             return False
 
     def clone_repo_by_url(self, repo_url):
@@ -51,7 +51,7 @@ class GitUtils:
             clone_repository(repo_url, self.get_repo_path_by_url(repo_url), bare=True)
             return True
         except Exception as e:
-            print(e)
+            Helpers().print_error(e)
             return False
 
     def get_repo_path(self, repository):

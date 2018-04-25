@@ -21,12 +21,23 @@ class GithubCollector(Collector):
         return False
 
     def collect_organization(self, organization):
+        email = None
+        blog = None
+        name = None
         url = "{}/orgs/{}".format(self.base_url, organization)
         result = Helpers().request(url)
         if result:
             members = self.collect_members("{}/members".format(url))
             repos = self.collect_repositories("{}/repos".format(url))
-            return Organization(result["name"], result["email"], result["blog"], repos, members)
+            if "email" in result:
+                email = result["email"]
+            if "blog" in result:
+                blog = result["blog"]
+            if "name" in result:
+                name = result["name"]
+            else:
+                name = result["login"]
+            return Organization(name, email, blog, repos, members)
         pass
 
     def collect_members(self, members_url):
