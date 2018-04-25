@@ -64,7 +64,14 @@ class GithubCollector(Collector):
         return GitUtils(self.args).set_repos_authors(repos)
 
     def parse_repositories(self, request_result):
-        return [Repository(repo["id"], repo["name"], repo["clone_url"], None) for repo in request_result if request_result and not (repo["fork"] and not self.args.include_forks)]
+        repos = []
+        if request_result:
+            for repo in request_result:
+                if repo["name"] in self.args.exclude:
+                    continue
+                if not (repo["fork"] and not self.args.include_forks):
+                    repos.append(Repository(repo["id"], repo["name"], repo["clone_url"], None))
+        return repos
 
     def __str__(self):
         return str(self.__dict__)
