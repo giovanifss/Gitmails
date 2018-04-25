@@ -19,7 +19,8 @@ class Gitmails:
         Printer(self.args).print(collected)
         if self.args.file:
             Helpers().write_authors_file(self.args.file, Parser(self.args).get_collected_authors(collected))
-        self.apply_plugins(self.get_plugins(), collected)
+        if not self.args.skip_plugins:
+            self.apply_plugins(self.get_plugins(), collected)
         return collected
 
     def collect(self, collectors):
