@@ -41,7 +41,7 @@ class Printer:
             base = "{} <{}>".format(base, organization.email)
         if organization.members:
             base = "{} ({} Members)".format(base, len(organization.members))
-        Helpers().print_success("{}:".format(base))
+        Helpers().print_success("{}:".format(base), jumpline=True)
         if organization.blog:
             print("  Blog: {}".format(organization.blog))
         if with_repos:
@@ -58,7 +58,7 @@ class Printer:
         base = "{} ({})".format(user.name, user.username)
         if user.email:
             base = "{} - {}".format(base, user.email)
-        Helpers().print_success("{}:".format(base))
+        Helpers().print_success("{}:".format(base), jumpline=True)
         if user.bio:
             print("  Bio: {}".format(user.bio))
         if with_repos:

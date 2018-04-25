@@ -10,7 +10,7 @@ flow_group.add_argument("-r", "--repository", help="Direct link to a specific re
 flow_group.add_argument("-o", "--organization", help="Organization name owner of the repositories")
 parser.add_argument("-p", "--path", help="Path to a temporary directory", default="/tmp/gitmails")
 parser.add_argument("-f", "--file", help="Output csv result to file")
-parser.add_argument("-e", "--exclude", help="Name of repositories to be excluded from analysis", default=[])
+parser.add_argument("-e", "--exclude", nargs="+", help="Name of repositories to be excluded from analysis", default=[])
 parser.add_argument("--no-github", help="Do not collect Github information", action="store_true")
 parser.add_argument("--no-gitlab", help="Do not collect Gitlab information", action="store_true")
 parser.add_argument("--no-bitbucket", help="Do not collect Bitbucket information", action="store_true")
