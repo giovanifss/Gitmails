@@ -1,5 +1,6 @@
 import sys
 from core.plugins.hibp import HIBP
+from core.utils.git import GitUtils
 from core.utils.parser import Parser
 from core.utils.helpers import Helpers
 from core.utils.printer import Printer
@@ -13,13 +14,19 @@ class Gitmails:
         self.collectors = self.get_collectors()
 
     def execute(self):
-        collected = self.collect(self.get_collectors())
+        if self.args.repository:
+            collected = GitUtils(self.args).get_repo_authors_by_url(self.args.repository)
+        else:
+            collected = self.collect(self.get_collectors())
         if not collected:
             sys.exit(3)
         Printer(self.args).print(collected)
         if self.args.file:
-            Helpers().write_authors_file(self.args.file, Parser(self.args).get_collected_authors(collected))
-        if not self.args.skip_plugins:
+            authors_to_print = collected
+            if not self.args.repository:
+                authors_to_print = Parser(self.args).get_collected_authors(collected)
+            Helpers().write_authors_file(self.args.file, collected)
+        if not self.args.skip_plugins and not self.args.repository:
             self.apply_plugins(self.get_plugins(), collected)
         return collected
 
@@ -29,8 +36,6 @@ class Gitmails:
             collected = self.collect_users(self.args.username, collectors)
         elif self.args.organization:
             collected = self.collect_organizations(self.args.organization, collectors)
-        else:
-            pass
         if not collected:
             Helpers().print_error("gitmails: Could not collect any information")
             return False

@@ -14,7 +14,7 @@ class Printer:
         elif self.args.organization:
             self.print_organizations(data)
         else:
-            self.print_repos([data])
+            self.print_authors(data)
         return True
 
     def print_raw(self, data):
