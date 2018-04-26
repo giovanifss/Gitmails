@@ -14,7 +14,7 @@ parser.add_argument("-e", "--exclude", nargs="+", help="Name of repositories to 
 parser.add_argument("--no-github", help="Do not collect Github information", action="store_true")
 parser.add_argument("--no-gitlab", help="Do not collect Gitlab information", action="store_true")
 parser.add_argument("--no-bitbucket", help="Do not collect Bitbucket information", action="store_true")
-parser.add_argument("--skip-plugins", help="Do not execute core plugins", action="store_true")
+parser.add_argument("--run-plugins", help="Run plugins in the collected result", action="store_true")
 parser.add_argument("--include-forks", help="Include forked repositories", action="store_true")
 parser.add_argument("--include-users", help="Collect information about organization members", action="store_true")
 parser.add_argument("--api", help="Collect commit emails through APIs when available. Avoid clonning repositories.", action="store_true")

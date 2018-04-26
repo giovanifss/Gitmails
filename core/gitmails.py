@@ -27,7 +27,7 @@ class Gitmails:
             if not self.args.repository:
                 authors_to_print = Parser(self.args).get_collected_authors(collected)
             Helpers().write_authors_file(self.args.file, collected)
-        if not self.args.skip_plugins and not self.args.repository:
+        if self.args.run_plugins and not self.args.repository:
             self.apply_plugins(self.get_plugins(), collected)
         return collected
 
