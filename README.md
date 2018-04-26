@@ -35,8 +35,9 @@ email was found.
 the repository and go to the next.
 - `--no-cleanup`: Will not remove the clonned repositories.
 - `--include-forks`: Will include forked repositories in the analysis (Only for github).
+- `--include-users`: If collecting an organization, will collect info about its public members (Only for github).
 - `--no-[gitlab|github|bitbucket]`: Will not collect information of the specified host service.
-- `--skip-plugins`: Will not execute plugins.
+- `--run-plugins`: Will execute plugins in the collected result.
 - `--api`: Will try to collect all the information only through API, without clonning repositories.
 **NOTE**: Accessing APIs without authentication will cause your IP to be throttled. Also, API only collection is usually
 slower than clonning the repositories.
@@ -63,7 +64,10 @@ Or execute the [debian install](debian-install.sh) script.
 
 ## Docker
 You can also use the docker version of the tool by issuing the following command: 
-- `docker run -it giovanifss/gitmails --help`
+- `docker run -it giovanifss/gitmails --help`  
+
+Note that if you want to write to a file, you will need to mount a docker volume:  
+- `docker run -v /tmp/output:/opt -it giovanifss/gitmails -f /opt/result.txt`
 
 ## Contributing
 If you want to contribute with the project, take a look at [CONTRIBUTING](CONTRIBUTING.md).
