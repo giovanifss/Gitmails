@@ -9,12 +9,14 @@ class GitUtils:
         Helpers().ensure_dir(self.args.path)
 
     def get_repo_authors_by_url(self, repo_url):
+        Helpers().print_success("Clonning {}".format(repo_url))
         self.clone_repo_by_url(repo_url)
         return self.get_authors(self.get_repo_path_by_url(repo_url))
 
     def set_repos_authors(self, repos):
         p = Pool()
         p.map(self.clone_repo, repos)
+        Helpers().print_success("Collecting authors of repositories")
         results = p.map(self.get_repo_authors, repos)
         for i in results:
             if i:
@@ -27,6 +29,8 @@ class GitUtils:
 
     def get_authors(self, repo_path):
         try:
+            if self.args.verbose:
+                Helpers().print_success("Collecting authors in ".format(repo_path))
             authors_set = set()
             repo = Repository(repo_path)
             for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
@@ -38,6 +42,8 @@ class GitUtils:
 
     def clone_repo(self, repo):
         try:
+            if self.args.verbose:
+                Helpers().print_success("Clonning {}".format(repo_url))
             clone_repository(repo.url, self.get_repo_path(repo), bare=True)
             return True
         except ValueError as e:

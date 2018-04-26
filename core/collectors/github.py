@@ -12,6 +12,7 @@ class GithubCollector(Collector):
         self.base_url = "https://api.github.com"
 
     def collect_user(self, username, with_repositories=True):
+        Helpers().print_success("Collecting information of {} in Github".format(username))
         url = "{}/users/{}".format(self.base_url, username)
         result = Helpers().request(url)
         if result:
@@ -25,6 +26,7 @@ class GithubCollector(Collector):
         email = None
         blog = None
         name = None
+        Helpers().print_success("Collecting information of {} in Github".format(organization))
         url = "{}/orgs/{}".format(self.base_url, organization)
         result = Helpers().request(url)
         if result:
@@ -62,6 +64,8 @@ class GithubCollector(Collector):
         return repos
 
     def collect_authors(self, repos):
+        if self.args.verbose:
+            Helpers().print_success("Collecting authors")
         return GitUtils(self.args).set_repos_authors(repos)
 
     def parse_repositories(self, request_result):

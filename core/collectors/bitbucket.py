@@ -12,6 +12,7 @@ class BitbucketCollector(Collector):
         self.base_url = "https://api.bitbucket.org/2.0"
 
     def collect_user(self, username):
+        Helpers().print_success("Collecting information of {} in Bitbucket".format(username))
         url = "{}/users/{}".format(self.base_url, username)
         result = Helpers().request(url)
         if result:
@@ -20,6 +21,7 @@ class BitbucketCollector(Collector):
         return False
 
     def collect_organization(self, organization):
+        Helpers().print_success("Collecting information of {} in Bitbucket".format(organization))
         url = "{}/teams/{}".format(self.base_url, organization)
         result = Helpers().request(url)
         if result:
@@ -29,6 +31,8 @@ class BitbucketCollector(Collector):
 
     def collect_repositories(self, repos_url):
         repos = []
+        if self.args.verbose:
+            Helpers().print_success("Collecting repositories")
         result = Helpers().request(repos_url)
         repos.append(self.parse_repositories(result["values"]) if result else [])
         while "next" in result:
@@ -40,6 +44,8 @@ class BitbucketCollector(Collector):
         return repos
 
     def set_authors(self, repos):
+        if self.args.verbose:
+            Helpers().print_success("Collecting authors")
         return GitUtils(self.args).set_repos_authors(repos)
 
     def parse_repositories(self, request_result):

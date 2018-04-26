@@ -14,6 +14,7 @@ class GitlabCollector(Collector):
 
     def collect_user(self, username):
         userid = self.get_userid(username)
+        Helpers().print_success("Collecting information of {} in Gitlab".format(username))
         url = "{}/users/{}".format(self.base_url, userid)
         result = Helpers().request(url)
         if result:
@@ -22,6 +23,7 @@ class GitlabCollector(Collector):
         return False
 
     def collect_organization(self, organization):
+        Helpers().print_success("Collecting information of {} in Gitlab".format(organization))
         url = "{}/groups/{}".format(self.base_url, organization)
         result = Helpers().request(url)
         if result:
@@ -31,6 +33,8 @@ class GitlabCollector(Collector):
         return False
 
     def collect_repositories(self, repos_url):
+        if self.args.verbose:
+            Helpers().print_success("Collecting repositories")
         result = Helpers().request(repos_url)
         repos = self.parse_repositories(result) if result else []
         self.get_collaborators(repos)
@@ -41,6 +45,8 @@ class GitlabCollector(Collector):
 
     def get_collaborators(self, repos):
         if repos:
+            if self.args.verbose:
+                Helpers().print_success("Collecting authors")
             if self.args.api:
                 [repo.set_authors(self.repository_collaborators(repo.identifier)) for repo in repos]
             else:

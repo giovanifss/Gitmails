@@ -15,6 +15,7 @@ class Gitmails:
 
     def execute(self):
         if self.args.repository:
+            Helpers().print_success("Collecting information for {}".format(self.args.repository))
             collected = GitUtils(self.args).get_repo_authors_by_url(self.args.repository)
         else:
             collected = self.collect(self.get_collectors())
@@ -33,8 +34,10 @@ class Gitmails:
     def collect(self, collectors):
         collected = []
         if self.args.username:
+            Helpers().print_success("Collecting information for {}".format(self.args.username))
             collected = self.collect_users(self.args.username, collectors)
         elif self.args.organization:
+            Helpers().print_success("Collecting information for {}".format(self.args.organization))
             collected = self.collect_organizations(self.args.organization, collectors)
         if not collected:
             Helpers().print_error("gitmails: Could not collect any information")
