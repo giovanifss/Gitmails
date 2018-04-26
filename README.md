@@ -28,7 +28,7 @@ finally print, in a "fancy_grid" table (from tabulate), all the Name-Email pars 
 Useful options:
 - `--raw`: Will print the results in pure text, no grids, just a comma separated values;
 - `-f | --file`: Will store the result in the specified file. The results will be in csv with no header format.
-- `--include-repositories``: Will make Gitmails print the result with information about in which repository the
+- `--include-repositories`: Will make Gitmails print the result with information about in which repository the
 email was found.
 - `-p | --path`: Specify the temporary path to clone the repositories.
 - `-e | --exclude`: Ignore specified repositories. Will compare the repository name, if it matches, will ignore
