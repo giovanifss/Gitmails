@@ -16,6 +16,7 @@ parser.add_argument("--no-gitlab", help="Do not collect Gitlab information", act
 parser.add_argument("--no-bitbucket", help="Do not collect Bitbucket information", action="store_true")
 parser.add_argument("--skip-plugins", help="Do not execute core plugins", action="store_true")
 parser.add_argument("--include-forks", help="Include forked repositories", action="store_true")
+parser.add_argument("--include-users", help="Collect information about organization members", action="store_true")
 parser.add_argument("--api", help="Collect commit emails through APIs when available. Avoid clonning repositories.", action="store_true")
 parser.add_argument("--no-cleanup", help="Do not delete the repositories after analysis", action="store_true")
 parser.add_argument("-v", "--verbose", help="Increase verbosity level", action="store_true")

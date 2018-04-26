@@ -45,15 +45,23 @@ class GithubCollector(Collector):
 
     def collect_members(self, members_url):
         members = []
+        if self.args.verbose:
+            Helpers().print_success("Collecting members")
         last_page = Helpers().get_last_page(members_url)
         last_page = last_page + 1 if last_page == 0 else last_page
         for i in range(1, (last_page + 1)):
-            result = Helpers().request("{}?page={}".format(members_url, last_page))
-            members.append(list(filter(bool, [self.collect_user(mem["login"], with_repositories=False) for mem in result if result])))
+            result = Helpers().request("{}?page={}".format(members_url, i))
+            if result:
+                if self.args.include_users:
+                    members.append(list(filter(bool, [self.collect_user(mem["login"], with_repositories=False) for mem in result])))
+                else:
+                    members.append([User(mem["login"], None, None, None, None) for mem in result])
         return Helpers().flatten(members)
 
     def collect_repositories(self, repos_url):
         repos = []
+        if self.args.verbose:
+            Helpers().print_success("Collecting repositories")
         last_page = Helpers().get_last_page(repos_url)
         last_page = last_page + 1 if last_page == 0 else last_page
         for i in range(1, (last_page + 1)):
