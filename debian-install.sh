@@ -1,4 +1,7 @@
 #!/bin/bash
+set -x
+
+cd /tmp
 sudo apt-get update && \
   sudo apt-get install python3 python3-pip libgit2-dev cmake make wget openssl libssl-dev libffi-dev -y
 
