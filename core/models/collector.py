@@ -1,4 +1,5 @@
 class Collector():
+
     def __init__(self, args):
         raise NotImplementedError
 

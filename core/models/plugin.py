@@ -1,4 +1,5 @@
 class BasePlugin:
+
     def __init__(self, args):
         self.args = args
 

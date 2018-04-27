@@ -1,4 +1,5 @@
 class Organization:
+
     def __init__(self, name, email, blog, repositories, members):
         self.name = name
         self.email = email

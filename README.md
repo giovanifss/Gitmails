@@ -15,10 +15,10 @@ With these steps, Gitmails can collect all emails found in commit history for a 
 
 ## Usage
 First, you must choose the operation method: collect emails of organization, user or single repository. This can be
-done by the options: `-u  --username`, `-o  --organization` or `-r  --repository`.  
+done by the options: `-u  --username`, `-o  --organization` or `-r  --repository`.
 
-After specifying the operation method, you must set the target. You should pass it right after the operation method:  
-`python3 gitmails.py -u some_username`, `python3 gitmails.py -o some_org` or `python3 gitmails.py -r some_repo_url`.  
+After specifying the operation method, you must set the target. You should pass it right after the operation method:
+`python3 gitmails.py -u some_username`, `python3 gitmails.py -o some_org` or `python3 gitmails.py -r some_repo_url`.
 **NOTE**: gitlab usernames are case sensitive, keep that in mind when trying to collect emails there.
 
 With this basic configuration, Gitmails will clone all repositories for the specified target (or clone the repository in
@@ -45,7 +45,7 @@ slower than clonning the repositories.
 ## Installation
 To install Gitmails, you will have to execute the following steps:
 - `pip3 install -r requirements.txt`
-- Intall pygit2 through your operating system package manager.
+- Install pygit2 through your operating system package manager.
 
 #### Debian problems
 If you are using Debian (maybe Ubuntu too), the libgit2 package do not work with Gitmails. To solve this, you will need
@@ -63,10 +63,10 @@ pip3 install pygit2
 Or execute the [debian install](debian-install.sh) script.
 
 ## Docker
-You can also use the docker version of the tool by issuing the following command: 
-- `docker run -it giovanifss/gitmails --help`  
+You can also use the docker version of the tool by issuing the following command:
+- `docker run -it giovanifss/gitmails --help`
 
-Note that if you want to write to a file, you will need to mount a docker volume:  
+Note that if you want to write to a file, you will need to mount a docker volume:
 - `docker run -v /tmp/output:/opt -it giovanifss/gitmails -f /opt/result.txt`
 
 ## Contributing

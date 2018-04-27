@@ -1,6 +1,8 @@
 from core.utils.helpers import Helpers
 
+
 class Parser:
+
     def __init__(self, args):
         self.args = args
 
@@ -9,14 +11,14 @@ class Parser:
         if collection:
             for c in collection:
                 all_authors.append(self.get_authors(c))
-        return set(Helpers().flatten(all_authors))
+        return set(Helpers.flatten(all_authors))
 
     def all_unique_emails(self, collection):
         all_emails = []
         if collection:
             for c in collection:
                 all_emails.append(self.unique_emails(c))
-        return set(Helpers().flatten(all_emails))
+        return set(Helpers.flatten(all_emails))
 
     def unique_emails(self, target):
         emails = set()
@@ -32,4 +34,4 @@ class Parser:
         if target:
             for repo in target.repositories:
                 authors.append(repo.authors)
-        return set(Helpers().flatten(authors))
+        return set(Helpers.flatten(authors))

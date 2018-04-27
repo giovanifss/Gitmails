@@ -8,15 +8,21 @@ from core.collectors.github import GithubCollector
 from core.collectors.gitlab import GitlabCollector
 from core.collectors.bitbucket import BitbucketCollector
 
+
 class Gitmails:
+
     def __init__(self, args):
         self.args = args
         self.collectors = self.get_collectors()
 
     def execute(self):
         if self.args.repository:
-            Helpers().print_success("Collecting information for {}".format(self.args.repository))
-            collected = GitUtils(self.args).get_repo_authors_by_url(self.args.repository)
+            Helpers.print_success(
+                "Collecting information for {}".format(self.args.repository)
+            )
+            collected = GitUtils(self.args).get_repo_authors_by_url(
+                self.args.repository
+            )
         else:
             collected = self.collect(self.get_collectors())
         if not collected:
@@ -26,7 +32,7 @@ class Gitmails:
             authors_to_print = collected
             if not self.args.repository:
                 authors_to_print = Parser(self.args).get_collected_authors(collected)
-            Helpers().write_authors_file(self.args.file, collected)
+            Helpers.write_authors_file(self.args.file, collected)
         if self.args.run_plugins and not self.args.repository:
             self.apply_plugins(self.get_plugins(), collected)
         return collected
@@ -34,14 +40,19 @@ class Gitmails:
     def collect(self, collectors):
         collected = []
         if self.args.username:
-            Helpers().print_success("Collecting information for {}".format(self.args.username))
+            Helpers.print_success(
+                "Collecting information for {}".format(self.args.username)
+            )
             collected = self.collect_users(self.args.username, collectors)
         elif self.args.organization:
-            Helpers().print_success("Collecting information for {}".format(self.args.organization))
+            Helpers.print_success(
+                "Collecting information for {}".format(self.args.organization)
+            )
             collected = self.collect_organizations(self.args.organization, collectors)
         if not collected:
-            Helpers().print_error("gitmails: Could not collect any information")
+            Helpers.print_error("gitmails: Could not collect any information")
             return False
+
         return collected
 
     def collect_users(self, username, collectors):
@@ -51,7 +62,10 @@ class Gitmails:
             if user:
                 result.append(user)
                 continue
-            Helpers().print_error("{}: Could not collect user information".format(c.collector_name))
+
+            Helpers.print_error(
+                "{}: Could not collect user information".format(c.collector_name)
+            )
         return result
 
     def collect_organizations(self, organization, collectors):
@@ -61,7 +75,12 @@ class Gitmails:
             if org:
                 result.append(org)
                 continue
-            Helpers().print_error("{}: Could not collect organization information".format(c.collector_name))
+
+            Helpers.print_error(
+                "{}: Could not collect organization information".format(
+                    c.collector_name
+                )
+            )
         return result
 
     def get_collectors(self):

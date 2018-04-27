@@ -1,4 +1,5 @@
 class User:
+
     def __init__(self, username, name, email, bio, repositories):
         self.username = username
         self.name = name
