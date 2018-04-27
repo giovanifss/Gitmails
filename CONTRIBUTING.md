@@ -6,3 +6,7 @@ To fix bugs or make minor improvements:
 - [Fork this repository](https://github.com/giovanifss/Gitmails/fork);
 - Commit your changes (it can be directly in the master);
 - [Open a pull request](https://github.com/giovanifss/Gitmails/compare) of your changes.
+
+Some ideas:
+- Add suport for authorization header;
+- Improve performance;
