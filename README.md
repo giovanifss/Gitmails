@@ -1,3 +1,5 @@
+<p align="center"><img src="https://s9.postimg.cc/7zzob0ehr/LOGO_PROPOSAL_FOR_GITMAILS_9b.png"></p>
+
 # Gitmails
 An information gathering tool to colect git commit emails in version control host services.
 
