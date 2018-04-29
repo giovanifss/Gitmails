@@ -35,7 +35,7 @@ class GitUtils:
     def get_authors(self, repo_path):
         try:
             if self.args.verbose:
-                Helpers.print_success("Collecting authors in ".format(repo_path))
+                Helpers.print_success("Collecting authors in {}".format(repo_path))
             authors_set = set()
             repo = Repository(repo_path)
             for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
@@ -49,7 +49,7 @@ class GitUtils:
     def clone_repo(self, repo):
         try:
             if self.args.verbose:
-                Helpers.print_success("Clonning {}".format(repo_url))
+                Helpers.print_success("Clonning {}".format(repo.url))
             clone_repository(repo.url, self.get_repo_path(repo), bare=True)
             return True
 
