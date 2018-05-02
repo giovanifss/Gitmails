@@ -1,4 +1,4 @@
-<p align="center"><img src="https://s9.postimg.cc/7zzob0ehr/LOGO_PROPOSAL_FOR_GITMAILS_9b.png"></p>
+<p align="center"><img src="https://s9.postimg.cc/70vgwyp73/LOGO_PROPOSAL_FOR_GITMAILS_9b.png"></p>
 
 ## Overview
 Gitmails explores that git commits contains a name and an email configured by the author and that version control
