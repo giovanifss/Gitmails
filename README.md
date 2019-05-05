@@ -1,5 +1,12 @@
 <p align="center"><img src="https://s9.postimg.cc/70vgwyp73/LOGO_PROPOSAL_FOR_GITMAILS_9b.png"></p>
 
+## Development - IMPORTANT
+This Gitmails version is no longer maintained. Check out the [Gitmails Shell](https://github.com/giovanifss/Gitmails-sh)
+port if you want to use a version that is maintained and, hopefully, developed.
+
+If you do not want to use the shell port and prefer the Python version, feel free to fork Gitmails and direct it to
+whenever path you see fit.
+
 ## Overview
 Gitmails explores that git commits contains a name and an email configured by the author and that version control
 host services are being used to store a lot of projects.
@@ -69,7 +76,7 @@ Note that if you want to write to a file, you will need to mount a docker volume
 - `docker run -v /tmp/output:/opt -it giovanifss/gitmails -f /opt/result.txt`
 
 ## Contributing
-If you want to contribute with the project, take a look at [CONTRIBUTING](CONTRIBUTING.md).
+This project is no longer maintained. If you want to contribute check out [Gitmails Shell](https://github.com/giovanifss/Gitmails-sh).
 
 ## Disclaimer
 This tool collects data that can be useful for legal offensive security jobs. The authors of this
